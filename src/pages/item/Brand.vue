@@ -29,7 +29,7 @@
           <v-btn icon @click="editBrand(props.item)">
             <i class="el-icon-edit"/>
           </v-btn>
-          <v-btn icon @click="deleteBrand(props.item)">
+          <v-btn icon @click="deleteBrand(props.item.id)">
             <i class="el-icon-delete"/>
           </v-btn>
         </td>
@@ -136,6 +136,33 @@
             // 回显商品分类
             this.oldBrand.categories = data;
           })
+      },
+      deleteBrand(bid){
+          this.$message.confirm('此操作将永久删除数据，是否继续?', '提示', {
+          confirmButtonText: '确定删除',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.log("delete...."+bid);
+          //this.handleDelete(this.model.id);
+         this.$http.delete("/item/brand/" +bid)
+          .then(({data}) => {
+
+             this.getDataFromServer();
+            // 修改标记
+            //this.isEdit = true;
+            // 控制弹窗可见：
+            //this.show = true;
+            // 获取要编辑的brand
+            //this.oldBrand = oldBrand
+            // 回显商品分类
+            //this.oldBrand.categories = data;
+          })
+
+        }).catch(()=>{
+          this.$message.info('已取消删除');
+        })
+
       },
       closeWindow(){
         // 重新加载数据
